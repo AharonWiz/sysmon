@@ -1,21 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Wextra -g -Iinc -pthread
 
-TARGETS = bin/sysmond bin/mem_sensor bin/cpu_sensor bin/proc_sensor
+all: bin/sysmond
 
-all: $(TARGETS)
-
-bin/sysmond: src/sysmond.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-bin/mem_sensor: src/mem_sensor.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-bin/cpu_sensor: src/cpu_sensor.c
-	$(CC) $(CFLAGS) -o $@ $<
-
-bin/proc_sensor: src/proc_sensor.c
-	$(CC) $(CFLAGS) -o $@ $<
+bin/sysmond: src/sysmond.c src/mem_sensor.c src/cpu_sensor.c src/proc_sensor.c inc/sysmon.h
+	mkdir -p bin
+	$(CC) $(CFLAGS) -o $@ src/sysmond.c src/mem_sensor.c src/cpu_sensor.c src/proc_sensor.c
 
 clean:
-	rm -f $(TARGETS)
+	rm -rf bin/*.o bin/sysmond
